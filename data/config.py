@@ -172,8 +172,21 @@ pascal_sbd_dataset = dataset_base.copy({
     'class_names': PASCAL_CLASSES,
 })
 
+QUALITEX_CLASSES = ("DEFECT OF WEFT", "IRREGULAR YARN", "DEFECT OF PRINTING",
+                    "OTHERS", "STAINS", "CREASES", "HOLES", "DEFECT OF DYEING",
+                    "ABRASIONS", "border", "sticker", "KNOTS")
 
+QUALITEX_LABEL_MAP = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10:10, 11: 11, 12: 12}
 
+qualitex_dataset = dataset_base.copy({
+  'name': 'qualitex dataset',
+  'train_info': '../annotations/instances_qualitex_train.json',
+  'train_images': '../train/',
+  'valid_info': '../annotations/instances_qualitex_valid.json',
+  'valid_images': '../valid/',
+  'class_names': QUALITEX_CLASSES,
+  'label_map': QUALITEX_LABEL_MAP
+})
 
 
 # ----------------------- TRANSFORMS ----------------------- #
@@ -765,6 +778,19 @@ yolact_resnet50_pascal_config = yolact_resnet50_config.copy({
         'pred_scales': [[32], [64], [128], [256], [512]],
         'use_square_anchors': False,
     })
+})
+
+yolact_resnet50_qualitex_config = yolact_resnet50_config.copy({
+    'name': 'yolact_plus_resnet50_qualitex',
+    # Dataset stuff
+    'dataset': qualitex_dataset,
+    'num_classes': len(qualitex_dataset.class_names) + 1,
+
+    'lr_steps': (2800, 6000, 7000, 7500),
+    'max_iter': 8000,
+
+    # Image Size
+    'max_size': 512,#4096,
 })
 
 # ----------------------- YOLACT++ CONFIGS ----------------------- #
