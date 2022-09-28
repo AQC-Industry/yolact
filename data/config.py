@@ -180,10 +180,10 @@ QUALITEX_LABEL_MAP = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10:1
 
 qualitex_dataset = dataset_base.copy({
   'name': 'qualitex dataset',
-  'train_info': '../annotations/instances_qualitex_train.json',
-  'train_images': '../train/',
-  'valid_info': '../annotations/instances_qualitex_valid.json',
-  'valid_images': '../valid/',
+  'train_info': '../annotations/instances_train2022.json',
+  'train_images': '../train2022/',
+  'valid_info': '../annotations/instances_valid2022.json',
+  'valid_images': '../valid2022/',
   'class_names': QUALITEX_CLASSES,
   'label_map': QUALITEX_LABEL_MAP
 })
