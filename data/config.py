@@ -181,9 +181,9 @@ QUALITEX_LABEL_MAP = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10:1
 qualitex_dataset = dataset_base.copy({
   'name': 'qualitex dataset',
   'train_info': '../annotations/instances_train2022.json',
-  'train_images': '../train2022/',
-  'valid_info': '../annotations/instances_valid2022.json',
-  'valid_images': '../valid2022/',
+  'train_images': '../train/',
+  'valid_info': '../annotations/instances_val2022.json',
+  'valid_images': '../valid/',
   'class_names': QUALITEX_CLASSES,
   'label_map': QUALITEX_LABEL_MAP
 })
@@ -786,8 +786,11 @@ yolact_resnet50_qualitex_config = yolact_resnet50_config.copy({
     'dataset': qualitex_dataset,
     'num_classes': len(qualitex_dataset.class_names) + 1,
 
-    'lr_steps': (2800, 6000, 7000, 7500),
-    'max_iter': 8000,
+    # Training params
+    'lr_steps': (28000, 60000, 70000, 75000),
+    'max_iter': 80000,
+    #'lr_steps': (2800, 6000, 7000, 7500),
+    #'max_iter': 8000,
 
     # Image Size
     'max_size': 512,#4096,
