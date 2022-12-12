@@ -840,6 +840,28 @@ yolact_resnet50_qualitex_custom_2_config = yolact_resnet50_config.copy({
     }),
 })
 
+yolact_resnet50_qualitex_custom_full_size_config = yolact_resnet50_config.copy({
+    'name': 'yolact_plus_resnet50_qualitex_custom_full_size',
+    # Dataset stuff
+    'dataset': qualitex_dataset,
+    'num_classes': len(qualitex_dataset.class_names) + 1,
+
+    # Training params
+    'lr_steps': (28000, 60000, 70000, 75000),
+    'max_iter': 80000,
+    #'lr_steps': (2800, 6000, 7000, 7500),
+    #'max_iter': 8000,
+
+    # Image Size
+    #'max_size': 4096,
+    
+    #'backbone': yolact_resnet50_config.backbone.copy({
+    #    'pred_aspect_ratios': [ [[1, 1/2, 2]] ]*6,
+    #    'pred_scales': [[24], [48], [96], [192], [384], [512]],
+    #    'use_square_anchors': False,
+    #}),
+})
+
 # ----------------------- YOLACT++ CONFIGS ----------------------- #
 
 yolact_plus_base_config = yolact_base_config.copy({
