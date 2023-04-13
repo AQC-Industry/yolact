@@ -155,8 +155,16 @@ class Resize(object):
         if self.resize_gt:
             # Act like each object is a color channel
             masks = masks.transpose((1, 2, 0))
-            masks = cv2.resize(masks, (width, height))
-            
+            # masks = cv2.resize(masks, (width, height))
+            cv_limit = 512
+            if masks.shape[2] <= cv_limit:
+                masks = cv2.resize(masks, (width, height))
+            else:
+                # split masks array on batches with max size 512 along channel axis, resize and merge them back
+                masks = np.concatenate([
+                    cv2.resize(masks[:, :, i:min(i + cv_limit, masks.shape[2])], (width, height))for i in range(0, masks.shape[2], cv_limit)
+                ], axis=2)
+
             # OpenCV resizes a (w,h,1) array to (s,s), so fix that
             if len(masks.shape) == 2:
                 masks = np.expand_dims(masks, 0)
@@ -677,7 +685,7 @@ class SSDAugmentation(object):
             enable_if(cfg.augment_random_mirror, RandomMirror()),
             enable_if(cfg.augment_random_flip, RandomFlip()),
             enable_if(cfg.augment_random_flip, RandomRot90()),
-            Resize(),
+            Resize(), #avoid resising for training Qualitex dataset
             enable_if(not cfg.preserve_aspect_ratio, Pad(cfg.max_size, cfg.max_size, mean)),
             ToPercentCoords(),
             PrepareMasks(cfg.mask_size, cfg.use_gt_bboxes),

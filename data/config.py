@@ -188,6 +188,22 @@ qualitex_dataset = dataset_base.copy({
   'label_map': QUALITEX_LABEL_MAP
 })
 
+QUALITEX_CLASSES_2 = ('26', '52', '748', '78', '88', 'ABRASIONS', 'CREASES',
+       'DEFECT OF PRINTING', 'DEFECT OF WEFT', 'HOLES', 'IRREGULAR YARN',
+       'KNOTS', 'OTHERS', 'STAINS', 'border', 'sticker')
+
+QUALITEX_LABEL_MAP_2 = {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 6, 7: 7, 8: 8, 9: 9, 10:10, 11: 11, 12: 12, 13:13, 14:14, 15:15, 16:16}
+
+
+qualitex_dataset_2 = dataset_base.copy({
+  'name': 'qualitex dataset_2',
+  'train_info': '../dataset_06022023/annotations/instances_train.json',
+  'train_images': '../dataset_06022023/train/',
+  'valid_info': '../dataset_06022023/annotations/instances_valid.json',
+  'valid_images': '../dataset_06022023/valid/',
+  'class_names': QUALITEX_CLASSES_2,
+  'label_map': QUALITEX_LABEL_MAP_2
+})
 
 # ----------------------- TRANSFORMS ----------------------- #
 
@@ -829,6 +845,34 @@ yolact_resnet50_qualitex_custom_2_config = yolact_resnet50_config.copy({
     'max_iter': 80000,
     #'lr_steps': (2800, 6000, 7000, 7500),
     #'max_iter': 8000,
+
+    # Image Size
+    'max_size': 512,#4096,
+    
+    'backbone': yolact_resnet50_config.backbone.copy({
+        'pred_aspect_ratios': [ [[1, 1/2, 2]] ]*6,
+        'pred_scales': [[24], [48], [96], [192], [384], [512]],
+        'use_square_anchors': False,
+    }),
+})
+
+yolact_resnet50_qualitex_custom_3_config = yolact_resnet50_config.copy({
+    'name': 'yolact_plus_resnet50_qualitex_custom_3',
+    # Dataset stuff
+    'dataset': qualitex_dataset_2,
+    'num_classes': len(qualitex_dataset_2.class_names) + 1,
+
+    # Training params
+    # First iteration - Learning fails
+    #'lr_steps': (28000, 60000, 70000, 75000),
+    #'max_iter': 80000,
+    # Second iteration as COCO
+    #'lr_steps': (280000, 600000, 700000, 750000),
+    #'max_iter': 800000,
+    # Third iteration Proportional - Learning fails after 50 epochs
+    'lr_steps': (160000, 345000, 400000, 430000),
+    'max_iter': 460000,
+    
 
     # Image Size
     'max_size': 512,#4096,
